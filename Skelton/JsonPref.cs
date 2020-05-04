@@ -38,7 +38,27 @@ namespace BRY
 		public JsonPref(string appName="")
 		{
 			if (appName == "") appName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
-			_filePath = Path.Combine(Application.UserAppDataPath, appName + ".json");
+
+			_filePath = Path.Combine(PrefDir("bry-ful",appName), appName + ".json");
+		}
+		//----------------------------------------------------------------
+		static public string PrefDir(string campany = "bry-ful",string appName ="")
+		{
+			string ppp = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+			if (campany != "")
+			{
+				ppp = Path.Combine(ppp, campany);
+
+			}
+			if (appName=="")
+			{
+				appName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
+			}
+
+			ppp = Path.Combine(ppp, appName);
+			if (Directory.Exists(ppp)==false)  Directory.CreateDirectory(ppp);
+			return ppp;
 		}
 		public override string ToString()
 		{
