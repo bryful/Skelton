@@ -50,7 +50,27 @@ namespace Skelton
 				Size sz = pref.GetSize("Size", out ok);
 				if (ok) this.Size = sz;
 				Point p = pref.GetPoint("Point", out ok);
-				if (ok) this.Location = p;
+				if (ok)
+				{
+					bool inScr = false;
+					foreach (Screen s in Screen.AllScreens)
+					{
+						if ((p.X>=s.Bounds.X)&&(p.X<s.Bounds.X+ s.Bounds.Width))
+						{
+							inScr = true;
+							break;
+						}
+						if ((p.Y >= s.Bounds.Y) && (p.Y < s.Bounds.Y + s.Bounds.Height))
+						{
+							inScr = true;
+							break;
+						}
+					}
+					if (inScr == true)
+					{
+						this.Location = p;
+					}
+				}
 			}
 			this.Text = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
 		}
@@ -66,8 +86,6 @@ namespace Skelton
 			JsonPref pref = new JsonPref();
 			pref.SetSize("Size", this.Size);
 			pref.SetPoint("Point", this.Location);
-
-			pref.SetIntArray("IntArray", new int[] { 8, 9, 7 });
 			pref.Save();
 
 		}
@@ -146,27 +164,6 @@ namespace Skelton
 		}
 			
 
-		/*
-private void button1_Click(object sender, EventArgs e)
-{
-	dynamic a = new DynamicJson();
-	a.fff = new string[] { "a", "B" };
-	a.fff = "12";
-	//a.fff = new { aaa=12, ccc="www" };
 
-	MessageBox.Show(a.fff.GetType().ToString());
-
-	JsonPref s = new JsonPref();
-	s.AddInt("aaa", 99);
-	string ss = s.ToJson();
-	MessageBox.Show(ss);
-	s.Parse(ss);
-	string sss = s.ToJson();
-	MessageBox.Show(sss);
-
-	int i = s.GetInt("aaa");
-	MessageBox.Show(String.Format("{0}", i));
-}
-*/
 	}
 }
